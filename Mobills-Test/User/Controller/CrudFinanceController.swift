@@ -74,8 +74,25 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
                 }
             })
         case .EditWaste:
-            print(self.userWaste)
-            print("edit waste")
+            let wasteProfit = self.userWaste
+            DispatchQueue.main.async {
+                self.imageSpinner.isHidden = false
+                self.dateTF.text = wasteProfit?.data?.dateValue().getStringDate() ?? ""
+                self.valorTF.text = wasteProfit?.valor?.stringValue.currencyInputFormatting() ?? ""
+                self.ObsTV.textColor = .black
+                self.ObsTV.text = wasteProfit?.descricao ?? ""
+                self.checkButton.isChecked = wasteProfit?.pago ?? false
+            }
+            WasteNetworking.getWasteImage(userUID: self.user.uid, documentID: wasteProfit?.documentID ?? "", completion: {(imgData, err) in
+                DispatchQueue.main.async {
+                    self.imageSpinner.isHidden = true
+                    if let data = imgData, let img = UIImage(data: data){
+                        self.selectedIV.image  = img
+                    }else{
+                        self.simpleAlert(title: "Atenção", msg: err)
+                    }
+                }
+            })
         }
     }
     
@@ -154,16 +171,41 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
                 }
             case .some(.EditProfit):
                 if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseProfit = FirebaseProfit(["documentID" : self.userProfit?.documentID ?? "","valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "recebido" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData()]){
-                    ProfitNetworking.updateProfit(userUID: userUID, profit: firebaseProfit)
-                    DispatchQueue.main.async {
-                        self.simpleAlert(title: "Sucesso", msg: "Dados editados com sucesso!")
-                    }
+                    ProfitNetworking.updateProfit(userUID: userUID, profit: firebaseProfit, completion: {
+                        (response) in
+                        DispatchQueue.main.async {
+                            SwiftSpinner.hide()
+                            if let err = response.errImage{
+                                self.simpleAlert(title: "Erro", msg: err)
+                            }else{
+                                self.simpleAlert(title: "Sucesso", msg: "Dados editados com sucesso!")
+                            }
+                        }
+                    })
+                    
                 }else{
                     SwiftSpinner.hide()
                     simpleAlert(title: "Atenção", msg: "Erro nos dados!")
                 }
             case .some(.EditWaste):
-                print("new profit")
+                if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseWaste = FirebaseWaste(["documentID" : self.userWaste?.documentID ?? "", "valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "pago" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData()]){
+                    WasteNetworking.updateWaste(userUID: userUID, waste: firebaseWaste, completion: {
+                        (response) in
+                        DispatchQueue.main.async {
+                            SwiftSpinner.hide()
+                            if let err = response.errImage{
+                                self.simpleAlert(title: "Erro", msg: err)
+                            }else{
+                                self.simpleAlert(title: "Sucesso", msg: "Dados editados com sucesso!")
+                            }
+                        }
+                        
+                    })
+                    
+                }else{
+                    SwiftSpinner.hide()
+                    simpleAlert(title: "Atenção", msg: "Erro nos dados!")
+                }
             default:
                 print("Default")
             }

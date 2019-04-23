@@ -30,7 +30,13 @@ class WasteNetworking {
         }
     }
     
-    static func updateWaste(userUID: String, waste: FirebaseWaste) {
+    static func updateWaste(userUID: String, waste: FirebaseWaste, completion: @escaping (GetWasteResponse) -> Void) {
         userBalanceRef.document(userUID).collection("wastes").document(waste.documentID!).updateData(waste.dictionary)
+        let imageData = waste.image ?? Data()
+        userImagesRef.child(userUID).child("wastes").child(waste.documentID!).putData(imageData, metadata: nil) { (metadata, errorFoto) in
+            let response = GetWasteResponse(errorDocmt: nil, errorImg: errorFoto)
+            completion(response)
+        }
+        
     }
 }

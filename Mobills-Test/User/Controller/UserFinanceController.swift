@@ -106,6 +106,34 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if indexPath.section == 0{
+            return false
+        }
+        return true
+    }
+    
+    func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
+        var actions: [UITableViewRowAction]?
+        if indexPath.section == 1{
+            let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+                let profit = self.userProfits![indexPath.row]
+                print(profit)
+                tableView.reloadData()
+            })
+            actions = [deleteAction]
+        }else{
+           let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+                let waste = self.userWastes![indexPath.row]
+                print(waste)
+                tableView.reloadData()
+            })
+            actions = [deleteAction]
+        }
+        
+        return actions
+    }
+    
     
     
     
