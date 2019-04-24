@@ -11,6 +11,8 @@ import UIKit
 class ProfitOrWasteCell: UITableViewCell {
     @IBOutlet weak var valorLB: UILabel!
     @IBOutlet weak var dateLB: UILabel!
+    @IBOutlet weak var recvieveOrPaidLB: UILabel!
+    @IBOutlet weak var checkBox: CheckBox!
     
     override func awakeFromNib() {
         super.awakeFromNib()

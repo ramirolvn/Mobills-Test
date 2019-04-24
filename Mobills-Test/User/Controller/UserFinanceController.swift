@@ -116,6 +116,10 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
                 profit = userProfits[indexPath.row]
                 
             }
+            
+            
+            cellProfitOrWaste.checkBox.tintColor =  UIColor.init(rgb: 0x009000)
+            cellProfitOrWaste.checkBox.isChecked = profit.recebido ?? false
             cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0x009000)
             cellProfitOrWaste.valorLB.text = profit.valor?.stringValue.currencyInputFormatting() ?? ""
             cellProfitOrWaste.dateLB.text = profit.data?.dateValue().getStringDate()
@@ -127,6 +131,10 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             }else{
                 waste = userWastes[indexPath.row]
             }
+            
+            cellProfitOrWaste.checkBox.tintColor = UIColor.init(rgb: 0xcc0000)
+            cellProfitOrWaste.checkBox.isChecked = waste.pago ?? false
+            cellProfitOrWaste.recvieveOrPaidLB.text = "Pago?"
             cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0xcc0000)
             cellProfitOrWaste.valorLB.text = waste.valor?.stringValue.currencyInputFormatting() ?? ""
             cellProfitOrWaste.dateLB.text = waste.data?.dateValue().getStringDate()
