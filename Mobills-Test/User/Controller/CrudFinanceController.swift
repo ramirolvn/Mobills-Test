@@ -26,6 +26,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
     private let datePicker = UIDatePicker()
     private let textViewPlaceholder = "Digite aqui uma observação até 140 letras"
     private let formatter = DateFormatter()
+    
     var user: FirebaseUser!
     var labelText = ""
     var dataType: DataType!
@@ -37,7 +38,6 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         case camera, photoLibrary
     }
     
-    
     enum DataType {
         case NewProfit
         case NewWaste
@@ -45,9 +45,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         case EditWaste
     }
     
-    fileprivate var didFetchData = false
     func setup(for dataType: DataType) {
-        didFetchData = true
         switch dataType {
         case .NewProfit:
             break
@@ -59,7 +57,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
                 self.imageSpinner.isHidden = false
                 self.dateTF.text = userProfit?.data?.dateValue().getStringDate() ?? ""
                 self.valorTF.text = userProfit?.valor?.stringValue.currencyInputFormatting() ?? ""
-                self.ObsTV.textColor = .black
+                self.ObsTV.textColor = .darkGray
                 self.ObsTV.text = userProfit?.descricao ?? ""
                 self.checkButton.isChecked = userProfit?.recebido ?? false
             }
@@ -79,7 +77,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
                 self.imageSpinner.isHidden = false
                 self.dateTF.text = wasteProfit?.data?.dateValue().getStringDate() ?? ""
                 self.valorTF.text = wasteProfit?.valor?.stringValue.currencyInputFormatting() ?? ""
-                self.ObsTV.textColor = .black
+                self.ObsTV.textColor = .darkGray
                 self.ObsTV.text = wasteProfit?.descricao ?? ""
                 self.checkButton.isChecked = wasteProfit?.pago ?? false
             }
@@ -100,14 +98,11 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         super.viewDidLoad()
         self.hideKeyboardWhenTappedAround()
         imagePicker.delegate = self
+        self.ObsTV.delegate = self
         formatter.dateFormat = "dd/MM/yyyy"
         showDatePicker()
-        self.ObsTV.delegate = self
         ObsTV.text = textViewPlaceholder
         ObsTV.textColor = .lightGray
-        // make default API call
-        
-        // Do any additional setup after loading the view.
     }
     
     private func validateForm() -> String?{
@@ -136,7 +131,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         if validate == nil{
             switch self.dataType {
             case .some(.NewProfit):
-                if let UserUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseProfit = FirebaseProfit(["valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "recebido" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData()]){
+                if let UserUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseProfit = FirebaseProfit(["valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "recebido" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData() as Any]){
                     ProfitNetworking.createProfit(userUID: UserUID, profit: firebaseProfit, completion: {
                         (response) in
                         SwiftSpinner.hide()
@@ -153,7 +148,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
                     simpleAlert(title: "Atenção", msg: "Erro nos dados!")
                 }
             case .some(.NewWaste):
-                if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseWaste = FirebaseWaste(["valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "pago" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData()]){
+                if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseWaste = FirebaseWaste(["valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "pago" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData() as Any]){
                     WasteNetworking.createWaste(userUID: userUID, waste: firebaseWaste, completion: {
                         (response) in
                         SwiftSpinner.hide()
@@ -170,7 +165,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
                     simpleAlert(title: "Atenção", msg: "Erro nos dados!")
                 }
             case .some(.EditProfit):
-                if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseProfit = FirebaseProfit(["documentID" : self.userProfit?.documentID ?? "","valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "recebido" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData()]){
+                if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseProfit = FirebaseProfit(["documentID" : self.userProfit?.documentID ?? "","valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "recebido" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData() as Any]){
                     ProfitNetworking.updateProfit(userUID: userUID, profit: firebaseProfit, completion: {
                         (response) in
                         DispatchQueue.main.async {
@@ -188,7 +183,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
                     simpleAlert(title: "Atenção", msg: "Erro nos dados!")
                 }
             case .some(.EditWaste):
-                if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseWaste = FirebaseWaste(["documentID" : self.userWaste?.documentID ?? "", "valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "pago" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData()]){
+                if let userUID = RealmUser().retriveUser()?.uid, let date = formatter.date(from: self.dateTF.text!), let valor = self.valorTF.text?.getNumberRepresentation(), let firebaseWaste = FirebaseWaste(["documentID" : self.userWaste?.documentID ?? "", "valor" : valor, "data": date, "descricao" : self.ObsTV.text!, "pago" : self.checkButton.isChecked ? true : false, "image" : self.selectedIV.image?.pngData() as Any]){
                     WasteNetworking.updateWaste(userUID: userUID, waste: firebaseWaste, completion: {
                         (response) in
                         DispatchQueue.main.async {
@@ -215,7 +210,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         }
     }
     
-    @IBAction func addAttachment(_ sender: UIButton) {
+    @IBAction func addAttachment(_ sender: UIBarButtonItem) {
         
         let alert = UIAlertController(title: "Escolha uma câmera", message: nil, preferredStyle: .actionSheet)
         alert.addAction(UIAlertAction(title: "Câmera", style: .default, handler: { _ in
@@ -229,33 +224,14 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         alert.addAction(UIAlertAction.init(title: "Cancelar", style: .cancel, handler: nil))
         switch UIDevice.current.userInterfaceIdiom {
         case .pad:
-            alert.popoverPresentationController?.sourceView = sender
-            alert.popoverPresentationController?.sourceRect = sender.bounds
+            alert.popoverPresentationController?.sourceView = self.checkButton
+            alert.popoverPresentationController?.sourceRect = self.checkButton.bounds
             alert.popoverPresentationController?.permittedArrowDirections = .up
         default:
             break
         }
         
         self.present(alert, animated: true, completion: nil)
-    }
-    
-    func openCamera()
-    {
-        if(UIImagePickerController.isSourceTypeAvailable(.camera)){
-            imagePicker.sourceType = UIImagePickerController.SourceType.camera
-            imagePicker.allowsEditing = true
-            self.present(imagePicker, animated: true, completion: nil)
-        }
-        else{
-            self.simpleAlert(title: "Atenção", msg: "Você não possui câmera!")
-        }
-    }
-    
-    func openGallary()
-    {
-        imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
-        imagePicker.allowsEditing = true
-        self.present(imagePicker, animated: true, completion: nil)
     }
     
     //MARK:-- ImagePicker delegate
@@ -279,7 +255,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
     func textViewDidBeginEditing(_ textView: UITextView) {
         if textView.textColor == .lightGray {
             textView.text = nil
-            textView.textColor = .black
+            textView.textColor = .darkGray
         }
     }
     
@@ -297,11 +273,30 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
     }
     
     
+    //Mark: -- PrivateFuncs
+    
+    private func openCamera(){
+        if(UIImagePickerController.isSourceTypeAvailable(.camera)){
+            imagePicker.sourceType = UIImagePickerController.SourceType.camera
+            imagePicker.allowsEditing = true
+            self.present(imagePicker, animated: true, completion: nil)
+        }
+        else{
+            self.simpleAlert(title: "Atenção", msg: "Você não possui câmera!")
+        }
+    }
+    
+    private func openGallary(){
+        imagePicker.sourceType = UIImagePickerController.SourceType.photoLibrary
+        imagePicker.allowsEditing = true
+        self.present(imagePicker, animated: true, completion: nil)
+    }
+    
+    
     
     private func showDatePicker(){
         //Formate Date
         datePicker.datePickerMode = .date
-        datePicker.maximumDate = Date()
         
         //ToolBar
         let toolbar = UIToolbar();
@@ -317,6 +312,8 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         
     }
     
+    //Mark:-- Objc Funcs
+    
     @objc func donedatePicker(){
         
         self.dateTF.text = formatter.string(from: datePicker.date)
@@ -328,7 +325,6 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
     }
     
     @objc func myTextFieldDidChange(_ textField: UITextField) {
-        
         if let amountString = textField.text?.currencyInputFormatting() {
             textField.text = amountString
         }

@@ -6,11 +6,14 @@ import BTNavigationDropdownMenu
 
 class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var infoTable: UITableView!
+    @IBOutlet weak var welcomeView: UIView!
     
     var user: FirebaseUser!
     var userProfits: [FirebaseProfit]?
     var userWastes: [FirebaseWaste]?
-    private let items = ["Todos as transações", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+    private var filteredProfits: [FirebaseProfit]?
+    private var filteredWastes: [FirebaseWaste]?
+    private let items = ["Todas as transações", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
     
     
     
@@ -23,7 +26,8 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         self.infoTable.dataSource = self
         self.infoTable.rowHeight = UITableView.automaticDimension
         self.infoTable.estimatedRowHeight = 250
-        menuView.didSelectItemAtIndexHandler = {[weak self] (indexPath: Int) -> () in
+        menuView.didSelectItemAtIndexHandler = {(indexPath: Int) -> () in
+            self.filteringWastesAndProfitsPerMonth(indexPath)
             print("Did select item at index: \(indexPath)")
         }
     }
@@ -33,16 +37,13 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     
-    
     @IBAction func logouAction(_ sender: UIBarButtonItem) {
         SwiftSpinner.show("Saindo...")
         UserNetworking.logoutUser(user, completion: {response in
             SwiftSpinner.hide()
             if let err = response.err{
-                SwiftSpinner.hide()
                 self.simpleAlert(title: "Erro", msg: err)
             }else{
-                SwiftSpinner.hide()
                 let mainStoryBoard: UIStoryboard = UIStoryboard(name: "Main", bundle: nil)
                 if let loginNavigation = mainStoryBoard.instantiateViewController(withIdentifier: "loginNavigation") as? UINavigationController, let window = appDel.window{
                     window.rootViewController = loginNavigation
@@ -53,10 +54,23 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         
     }
     
-    //Mark:-- TableView Delegates
+    //Mark:-- TableView Delegates and Datasources
+    
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 3
+        if self.userWastes?.count == 0 && self.userProfits?.count == 0{
+            DispatchQueue.main.async {
+                self.welcomeView.isHidden = false
+                self.infoTable.isHidden = true
+            }
+            return 0
+        }else{
+            DispatchQueue.main.async {
+                self.welcomeView.isHidden = true
+                self.infoTable.isHidden = false
+            }
+            return 3
+        }
     }
     
     func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -185,6 +199,7 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
     
     
     
+    //Mark:-- Prepare for segue
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let crudFinanceCntrl = segue.destination as? CrudFinanceController else { return }
@@ -214,8 +229,10 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         }
     }
     
+    //Mark: -- Private Funcs
+    
     private func setupChart(chart: PieChartView) -> PieChartView{
-        let track = ["Despesas", "Receitas"]
+        var track = ["Despesas", "Receitas"]
         
         var money = [NSNumber]()
         if let userProfits = self.userProfits, let userWastes = self.userWastes{
@@ -232,7 +249,6 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
                     totalUserProfits = totalUserProfits + valor
                 }
             }
-            
             money.append(totalWastesProfits)
             money.append(totalUserProfits)
         }
@@ -242,12 +258,16 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             let entry = PieChartDataEntry()
             entry.y = value.doubleValue
             entry.label = track[index]
-            entries.append( entry)
+            entries.append(entry)
         }
         
         let set = PieChartDataSet(values: entries, label: nil)
         set.colors = [UIColor.init(rgb: 0xcc0000),UIColor.init(rgb: 0x009000)]
         let data = PieChartData(dataSet: set)
+        let formatter = NumberFormatter()
+        formatter.minimumFractionDigits = 2
+        formatter.zeroSymbol = "0,00"
+        data.setValueFormatter(DefaultValueFormatter(formatter:formatter))
         chart.data = data
         chart.noDataText = "Sem registro até o momento"
         chart.isUserInteractionEnabled = true
@@ -256,7 +276,6 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         d.text = "Despesas x Receitas"
         d.position = CGPoint(x: 110, y: 10)
         chart.chartDescription = d
-        chart.holeRadiusPercent = 0.2
         chart.transparentCircleColor = UIColor.clear
         return chart
     }
@@ -274,7 +293,8 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             floaty.close()
         })
         DispatchQueue.main.async {
-            floaty.tintColor = .darkGray
+            floaty.buttonColor = .darkGray
+            floaty.plusColor = .white
             self.view.addSubview(floaty)
         }
     }
@@ -304,8 +324,25 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             })
         })
+    }
+    
+    private func filteringWastesAndProfitsPerMonth(_ index: Int){
+        switch index {
+        case 0:
+            self.userWastes = nil
+            self.filteredWastes = nil
+        default:
+            let filteredUsers = self.userWastes?.filter {
+                return Calendar.current.component(.month, from: $0.data?.dateValue()) == index
+            }
+            let filteredWastes = self.userWastes?.filter {
+                return Calendar.current.component(.month, from: $0.data?.dateValue()) == index
+            }
+        }
         
-        
+        DispatchQueue.main.async {
+            self.infoTable.reloadData()
+        }
     }
     
 }

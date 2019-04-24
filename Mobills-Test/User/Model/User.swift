@@ -17,7 +17,6 @@ struct FirebaseUser: Codable {
 class RealmUser : Object {
     
     @objc private dynamic var structData:Data? = nil
-    
     var myStruct : FirebaseUser? {
         get {
             if let data = structData {
