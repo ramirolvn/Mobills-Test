@@ -29,12 +29,22 @@ class ProfitNetworking {
         }
     }
     
-    static func updateProfit(userUID: String, profit: FirebaseProfit, completion: @escaping (GetProfitResponse) -> Void) {
-        userBalanceRef.document(userUID).collection("profits").document(profit.documentID!).updateData(profit.dictionary)
+    static func updateProfit(userUID: String, profit: FirebaseProfit, completion: @escaping (GetProfitResponse) -> Void) { userBalanceRef.document(userUID).collection("profits").document(profit.documentID!).updateData(profit.dictionary){ errDocument in
         let imageData = profit.image ?? Data()
         userImagesRef.child(userUID).child("profits").child(profit.documentID!).putData(imageData, metadata: nil) { (metadata, errorFoto) in
-            let response = GetProfitResponse(errorDocmt: nil, errorImg: errorFoto)
+            let response = GetProfitResponse(errorDocmt: errDocument, errorImg: errorFoto)
             completion(response)
+        }
+        }
+    }
+    
+    static func deleteProfit(userUID: String, profit: FirebaseProfit, completion: @escaping (GetProfitResponse) -> Void) {
+        userBalanceRef.document(userUID).collection("profits").document(profit.documentID!).delete(){ errDocument in
+            userImagesRef.child(userUID).child("profits").child(profit.documentID!).delete(completion: {
+                (errorPhoto) in
+                let response = GetProfitResponse(errorDocmt: errDocument, errorImg: errorPhoto)
+                completion(response)
+            })
         }
     }
 }

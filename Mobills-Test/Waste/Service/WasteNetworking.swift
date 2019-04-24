@@ -31,12 +31,22 @@ class WasteNetworking {
     }
     
     static func updateWaste(userUID: String, waste: FirebaseWaste, completion: @escaping (GetWasteResponse) -> Void) {
-        userBalanceRef.document(userUID).collection("wastes").document(waste.documentID!).updateData(waste.dictionary)
-        let imageData = waste.image ?? Data()
-        userImagesRef.child(userUID).child("wastes").child(waste.documentID!).putData(imageData, metadata: nil) { (metadata, errorFoto) in
-            let response = GetWasteResponse(errorDocmt: nil, errorImg: errorFoto)
-            completion(response)
+        userBalanceRef.document(userUID).collection("wastes").document(waste.documentID!).updateData(waste.dictionary){ errDocument in
+            let imageData = waste.image ?? Data()
+            userImagesRef.child(userUID).child("wastes").child(waste.documentID!).putData(imageData, metadata: nil) { (metadata, errorFoto) in
+                let response = GetWasteResponse(errorDocmt: errDocument, errorImg: errorFoto)
+                completion(response)
+            }
         }
-        
+    }
+    
+    static func deleteWaste(userUID: String, waste: FirebaseWaste, completion: @escaping (GetWasteResponse) -> Void) {
+        userBalanceRef.document(userUID).collection("wastes").document(waste.documentID!).delete(){ errDocument in
+            userImagesRef.child(userUID).child("wastes").child(waste.documentID!).delete(completion: {
+                (errorPhoto) in
+                let response = GetWasteResponse(errorDocmt: errDocument, errorImg: errorPhoto)
+                completion(response)
+            })
+        }
     }
 }

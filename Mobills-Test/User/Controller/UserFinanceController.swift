@@ -2,28 +2,37 @@ import UIKit
 import Floaty
 import SwiftSpinner
 import Charts
+import BTNavigationDropdownMenu
 
-class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewDataSource {
+class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var infoTable: UITableView!
     
     var user: FirebaseUser!
     var userProfits: [FirebaseProfit]?
     var userWastes: [FirebaseWaste]?
+    private let items = ["Todos as transações", "Janeiro", "Fevereiro", "Março", "Abril", "Maio", "Junho", "Julho", "Agosto", "Setembro", "Outubro", "Novembro", "Dezembro"]
+    
     
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        let menuView = BTNavigationDropdownMenu(navigationController: self.navigationController, containerView: self.navigationController!.view, title: BTTitle.index(0), items: items)
+        self.navigationItem.titleView = menuView
         self.addFloatBtn()
         self.infoTable.delegate = self
         self.infoTable.dataSource = self
         self.infoTable.rowHeight = UITableView.automaticDimension
         self.infoTable.estimatedRowHeight = 250
-        
+        menuView.didSelectItemAtIndexHandler = {[weak self] (indexPath: Int) -> () in
+            print("Did select item at index: \(indexPath)")
+        }
     }
     
     override func viewWillAppear(_ animated: Bool) {
         self.getProfitsAndWastes()
     }
+    
+    
     
     @IBAction func logouAction(_ sender: UIBarButtonItem) {
         SwiftSpinner.show("Saindo...")
@@ -81,13 +90,13 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             cell = chartCell
         }else if indexPath.section == 1, let userProfits = self.userProfits, let cellProfitOrWaste = self.infoTable.dequeueReusableCell(withIdentifier: "profitOrWasteCell") as? ProfitOrWasteCell{
             let profit = userProfits[indexPath.row]
-            cellProfitOrWaste.valorLB.textColor = .green
+            cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0x009000)
             cellProfitOrWaste.valorLB.text = profit.valor?.stringValue.currencyInputFormatting() ?? ""
             cellProfitOrWaste.dateLB.text = profit.data?.dateValue().getStringDate()
             cell = cellProfitOrWaste
         }else if indexPath.section == 2, let userWastes = self.userWastes, let cellProfitOrWaste = self.infoTable.dequeueReusableCell(withIdentifier: "profitOrWasteCell") as? ProfitOrWasteCell{
             let waste = userWastes[indexPath.row]
-            cellProfitOrWaste.valorLB.textColor = .red
+            cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0xcc0000)
             cellProfitOrWaste.valorLB.text = waste.valor?.stringValue.currencyInputFormatting() ?? ""
             cellProfitOrWaste.dateLB.text = waste.data?.dateValue().getStringDate()
             cell = cellProfitOrWaste
@@ -118,15 +127,55 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         if indexPath.section == 1{
             let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
                 let profit = self.userProfits![indexPath.row]
-                print(profit)
-                tableView.reloadData()
+                let alert = UIAlertController(title: "Atenção", message: "Tem certeza que deseja deletar essa transação?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Sim", style: .destructive, handler: {_ in
+                    DispatchQueue.main.async {
+                        SwiftSpinner.show("Deletando..")
+                    }
+                    ProfitNetworking.deleteProfit(userUID: self.user.uid, profit: profit, completion: {
+                        (response) in
+                        DispatchQueue.main.async {
+                            SwiftSpinner.hide()
+                            if let errDcm = response.errDocument{
+                                self.simpleAlert(title: "Erro", msg: errDcm)
+                            }else{
+                                self.userProfits?.remove(at: indexPath.row)
+                                self.infoTable.reloadData()
+                            }
+                        }
+                    })
+                }))
+                alert.addAction(UIAlertAction(title: "Não", style: .default, handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
             })
             actions = [deleteAction]
         }else{
-           let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
+            let deleteAction = UITableViewRowAction(style: .default, title: "Delete", handler: { (action, indexPath) in
                 let waste = self.userWastes![indexPath.row]
-                print(waste)
-                tableView.reloadData()
+                let alert = UIAlertController(title: "Atenção", message: "Tem certeza que deseja deletar essa transação?", preferredStyle: .alert)
+                alert.addAction(UIAlertAction(title: "Sim", style: .destructive, handler: {_ in
+                    DispatchQueue.main.async {
+                        SwiftSpinner.show("Deletando..")
+                    }
+                    WasteNetworking.deleteWaste(userUID: self.user.uid, waste: waste, completion: {
+                        (response) in
+                        DispatchQueue.main.async {
+                            SwiftSpinner.hide()
+                            if let errDcm = response.errDocument{
+                                self.simpleAlert(title: "Erro", msg: errDcm)
+                            }else{
+                                self.userWastes?.remove(at: indexPath.row)
+                                self.infoTable.reloadData()
+                            }
+                        }
+                    })
+                }))
+                alert.addAction(UIAlertAction(title: "Não", style: .default, handler: nil))
+                DispatchQueue.main.async {
+                    self.present(alert, animated: true, completion: nil)
+                }
             })
             actions = [deleteAction]
         }
@@ -148,14 +197,17 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
                 crudFinanceCntrl.dataType = .NewProfit
                 crudFinanceCntrl.setup(for: .NewProfit)
             }else if typeChosen == "Cadastrar Despesa"{
+                crudFinanceCntrl.labelText = "Pago?"
                 crudFinanceCntrl.dataType = .NewWaste
                 crudFinanceCntrl.setup(for: .NewWaste)
             }else if typeChosen == "Editar Receita"{
                 crudFinanceCntrl.userProfit = objToSender[1] as? FirebaseProfit ?? nil
+                crudFinanceCntrl.labelText = "Recebido?"
                 crudFinanceCntrl.dataType = .EditProfit
                 crudFinanceCntrl.setup(for: .EditProfit)
             }else if typeChosen == "Editar Despesa"{
                 crudFinanceCntrl.userWaste = objToSender[1] as? FirebaseWaste ?? nil
+                crudFinanceCntrl.labelText = "Pago?"
                 crudFinanceCntrl.dataType = .EditWaste
                 crudFinanceCntrl.setup(for: .EditWaste)
             }
@@ -193,15 +245,16 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             entries.append( entry)
         }
         
-        let set = PieChartDataSet( values: entries, label: "Gráfico mensal")
-        set.colors = [.red,.green]
+        let set = PieChartDataSet(values: entries, label: nil)
+        set.colors = [UIColor.init(rgb: 0xcc0000),UIColor.init(rgb: 0x009000)]
         let data = PieChartData(dataSet: set)
         chart.data = data
         chart.noDataText = "Sem registro até o momento"
         chart.isUserInteractionEnabled = true
         
         let d = Description()
-        d.text = "Despesas x Receitas no mês"
+        d.text = "Despesas x Receitas"
+        d.position = CGPoint(x: 110, y: 10)
         chart.chartDescription = d
         chart.holeRadiusPercent = 0.2
         chart.transparentCircleColor = UIColor.clear
@@ -221,6 +274,7 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             floaty.close()
         })
         DispatchQueue.main.async {
+            floaty.tintColor = .darkGray
             self.view.addSubview(floaty)
         }
     }

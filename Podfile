@@ -12,6 +12,7 @@ target 'Mobills-Test' do
   pod 'Charts', '~> 3.0'
   pod 'Floaty', '~> 4.1.0'
   pod 'RealmSwift'
+  pod 'BTNavigationDropdownMenu'
   
   # Pods for Mobills-Test
   

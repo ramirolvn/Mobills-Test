@@ -8,7 +8,7 @@ struct FirebaseWaste {
     public let data: Timestamp?
     public let pago: Bool?
     public var image: Data? = nil
-     public var documentID: String? = ""
+    public var documentID: String? = ""
     var dictionary: [String: Any] {
         return ["valor": valor ?? nil,
                 "descricao": descricao ?? nil,

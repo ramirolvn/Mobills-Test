@@ -14,7 +14,7 @@ class CurrencyField: UITextField {
     private var lastValue: String?
     override func willMove(toSuperview newSuperview: UIView?) {
         // you can make it a fixed locale currency if needed
-         Formatter.currency.locale = Locale(identifier: "pt_BR")
+        Formatter.currency.locale = Locale(identifier: "pt_BR")
         addTarget(self, action: #selector(editingChanged), for: .editingChanged)
         keyboardType = .numberPad
         textAlignment = .center
