@@ -7,6 +7,7 @@ import BTNavigationDropdownMenu
 class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewDataSource{
     @IBOutlet weak var infoTable: UITableView!
     @IBOutlet weak var welcomeView: UIView!
+    @IBOutlet weak var noDataView: UIView!
     
     var user: FirebaseUser!
     var userProfits: [FirebaseProfit]?
@@ -28,7 +29,6 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         self.infoTable.estimatedRowHeight = 250
         menuView.didSelectItemAtIndexHandler = {(indexPath: Int) -> () in
             self.filteringWastesAndProfitsPerMonth(indexPath)
-            print("Did select item at index: \(indexPath)")
         }
     }
     
@@ -89,8 +89,14 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         case 0:
             return 1
         case 1:
+            if self.filteredProfits?.count != nil{
+                return  self.filteredProfits!.count
+            }
             return self.userProfits?.count ?? 0
         case 2:
+            if self.filteredWastes?.count != nil{
+                return  self.filteredWastes?.count ?? 0
+            }
             return self.userWastes?.count ?? 0
         default:
             return 0
@@ -103,13 +109,24 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             chartCell.chartView = self.setupChart(chart: chartCell.chartView)
             cell = chartCell
         }else if indexPath.section == 1, let userProfits = self.userProfits, let cellProfitOrWaste = self.infoTable.dequeueReusableCell(withIdentifier: "profitOrWasteCell") as? ProfitOrWasteCell{
-            let profit = userProfits[indexPath.row]
+            var profit: FirebaseProfit!
+            if self.filteredProfits?.count != nil{
+                profit = self.filteredProfits?[indexPath.row]
+            }else{
+                profit = userProfits[indexPath.row]
+                
+            }
             cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0x009000)
             cellProfitOrWaste.valorLB.text = profit.valor?.stringValue.currencyInputFormatting() ?? ""
             cellProfitOrWaste.dateLB.text = profit.data?.dateValue().getStringDate()
             cell = cellProfitOrWaste
         }else if indexPath.section == 2, let userWastes = self.userWastes, let cellProfitOrWaste = self.infoTable.dequeueReusableCell(withIdentifier: "profitOrWasteCell") as? ProfitOrWasteCell{
-            let waste = userWastes[indexPath.row]
+            var waste: FirebaseWaste!
+            if self.filteredWastes?.count != nil{
+                waste = filteredWastes?[indexPath.row]
+            }else{
+                waste = userWastes[indexPath.row]
+            }
             cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0xcc0000)
             cellProfitOrWaste.valorLB.text = waste.valor?.stringValue.currencyInputFormatting() ?? ""
             cellProfitOrWaste.dateLB.text = waste.data?.dateValue().getStringDate()
@@ -235,9 +252,25 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
         var track = ["Despesas", "Receitas"]
         
         var money = [NSNumber]()
-        if let userProfits = self.userProfits, let userWastes = self.userWastes{
-            var totalUserProfits: NSNumber = 0.0
-            var totalWastesProfits: NSNumber = 0.0
+        var totalUserProfits: NSNumber = 0.0
+        var totalWastesProfits: NSNumber = 0.0
+        if let userProfits = self.userProfits, let userWastes = self.userWastes, self.filteredProfits == nil && self.filteredWastes == nil{
+            for w in userWastes{
+                if let valor = w.valor{
+                    totalWastesProfits = totalWastesProfits + valor
+                }
+            }
+            
+            for p in userProfits{
+                if let valor = p.valor{
+                    totalUserProfits = totalUserProfits + valor
+                }
+            }
+            money.append(totalWastesProfits)
+            money.append(totalUserProfits)
+        }
+        
+        if let userProfits = self.filteredProfits, let userWastes = self.filteredWastes{
             for w in userWastes{
                 if let valor = w.valor{
                     totalWastesProfits = totalWastesProfits + valor
@@ -329,19 +362,35 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
     private func filteringWastesAndProfitsPerMonth(_ index: Int){
         switch index {
         case 0:
-            self.userWastes = nil
+            self.filteredProfits = nil
             self.filteredWastes = nil
         default:
-            let filteredUsers = self.userWastes?.filter {
-                return Calendar.current.component(.month, from: $0.data?.dateValue()) == index
+            let filteredProfitsAux = self.userProfits?.filter {
+                if let date = $0.data{
+                    return Calendar.current.component(.month, from: date.dateValue()) == index
+                }
+                return false
             }
-            let filteredWastes = self.userWastes?.filter {
-                return Calendar.current.component(.month, from: $0.data?.dateValue()) == index
+            let filteredWastesAux = self.userWastes?.filter {
+                if let date = $0.data{
+                    return Calendar.current.component(.month, from: date.dateValue()) == index
+                }
+                return false
             }
+            self.filteredProfits = filteredProfitsAux != nil ? filteredProfitsAux : [FirebaseProfit]()
+            self.filteredWastes = filteredWastesAux != nil ? filteredWastesAux : [FirebaseWaste]()
         }
         
+        
         DispatchQueue.main.async {
-            self.infoTable.reloadData()
+            if self.filteredProfits?.count == 0 && self.filteredWastes?.count == 0{
+                self.infoTable.isHidden = true
+                self.noDataView.isHidden = false
+            }else{
+                self.noDataView.isHidden = true
+                self.infoTable.isHidden = false
+                self.infoTable.reloadData()
+            }
         }
     }
     

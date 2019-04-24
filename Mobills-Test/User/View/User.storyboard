@@ -42,6 +42,41 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="foP-7w-TJT">
+                                <rect key="frame" x="0.0" y="64" width="375" height="603"/>
+                                <subviews>
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome" translatesAutoresizingMaskIntoConstraints="NO" id="M2D-NX-XrU">
+                                        <rect key="frame" x="67.5" y="216.5" width="240" height="170"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="neF-UD-OaG"/>
+                                        </constraints>
+                                    </imageView>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0L2-4y-VDx">
+                                        <rect key="frame" x="125" y="140.5" width="125" height="61"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="125" id="fIS-ZP-nGh"/>
+                                        </constraints>
+                                        <attributedString key="attributedText">
+                                            <fragment content="Seja bem-vindo   à nossa carteira virtual!">
+                                                <attributes>
+                                                    <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                                    <font key="NSFont" metaFont="system" size="17"/>
+                                                    <paragraphStyle key="NSParagraphStyle" alignment="center" lineBreakMode="wordWrapping" baseWritingDirection="natural" tighteningFactorForTruncation="0.0"/>
+                                                </attributes>
+                                            </fragment>
+                                        </attributedString>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                </subviews>
+                                <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <constraints>
+                                    <constraint firstItem="0L2-4y-VDx" firstAttribute="centerX" secondItem="M2D-NX-XrU" secondAttribute="centerX" id="3wi-yj-6or"/>
+                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="centerX" secondItem="foP-7w-TJT" secondAttribute="centerX" id="5Xy-PF-OB9"/>
+                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="top" secondItem="0L2-4y-VDx" secondAttribute="bottom" constant="15" id="fc3-Op-4MB"/>
+                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="width" secondItem="foP-7w-TJT" secondAttribute="height" multiplier="80:201" id="sKy-WL-sl4"/>
+                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="centerY" secondItem="foP-7w-TJT" secondAttribute="centerY" id="uN0-4U-yWh"/>
+                                </constraints>
+                            </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="q6h-Hb-ysS">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
@@ -139,22 +174,22 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="foP-7w-TJT">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="pES-Bo-g9d">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
-                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome" translatesAutoresizingMaskIntoConstraints="NO" id="M2D-NX-XrU">
+                                    <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-money" translatesAutoresizingMaskIntoConstraints="NO" id="h4j-uB-58m">
                                         <rect key="frame" x="67.5" y="216.5" width="240" height="170"/>
                                         <constraints>
-                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="neF-UD-OaG"/>
+                                            <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="pPg-FS-sJf"/>
                                         </constraints>
                                     </imageView>
-                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0L2-4y-VDx">
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bWY-Jc-pk0">
                                         <rect key="frame" x="125" y="140.5" width="125" height="61"/>
                                         <constraints>
-                                            <constraint firstAttribute="width" constant="125" id="fIS-ZP-nGh"/>
+                                            <constraint firstAttribute="width" constant="125" id="s0X-pI-aga"/>
                                         </constraints>
                                         <attributedString key="attributedText">
-                                            <fragment content="Seja bem-vindo   à nossa carteira virtual!">
+                                            <fragment content="Você não possui entrada nesse mês!">
                                                 <attributes>
                                                     <color key="NSColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <font key="NSFont" metaFont="system" size="17"/>
@@ -167,22 +202,26 @@
                                 </subviews>
                                 <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <constraints>
-                                    <constraint firstItem="0L2-4y-VDx" firstAttribute="centerX" secondItem="M2D-NX-XrU" secondAttribute="centerX" id="3wi-yj-6or"/>
-                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="centerX" secondItem="foP-7w-TJT" secondAttribute="centerX" id="5Xy-PF-OB9"/>
-                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="top" secondItem="0L2-4y-VDx" secondAttribute="bottom" constant="15" id="fc3-Op-4MB"/>
-                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="width" secondItem="foP-7w-TJT" secondAttribute="height" multiplier="80:201" id="sKy-WL-sl4"/>
-                                    <constraint firstItem="M2D-NX-XrU" firstAttribute="centerY" secondItem="foP-7w-TJT" secondAttribute="centerY" id="uN0-4U-yWh"/>
+                                    <constraint firstItem="h4j-uB-58m" firstAttribute="centerX" secondItem="pES-Bo-g9d" secondAttribute="centerX" id="6NK-oy-yhE"/>
+                                    <constraint firstItem="h4j-uB-58m" firstAttribute="top" secondItem="bWY-Jc-pk0" secondAttribute="bottom" constant="15" id="BiP-eH-xte"/>
+                                    <constraint firstItem="h4j-uB-58m" firstAttribute="width" secondItem="pES-Bo-g9d" secondAttribute="height" multiplier="80:201" id="MY6-F7-82x"/>
+                                    <constraint firstItem="h4j-uB-58m" firstAttribute="centerY" secondItem="pES-Bo-g9d" secondAttribute="centerY" id="WrT-hL-vAt"/>
+                                    <constraint firstItem="bWY-Jc-pk0" firstAttribute="centerX" secondItem="h4j-uB-58m" secondAttribute="centerX" id="cpM-2S-Tkg"/>
                                 </constraints>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="upp-4U-rk3" firstAttribute="top" secondItem="pES-Bo-g9d" secondAttribute="top" id="JuY-Ov-5SK"/>
                             <constraint firstItem="foP-7w-TJT" firstAttribute="top" secondItem="upp-4U-rk3" secondAttribute="top" id="LyW-hB-AKW"/>
+                            <constraint firstItem="upp-4U-rk3" firstAttribute="bottom" secondItem="pES-Bo-g9d" secondAttribute="bottom" id="MVJ-UQ-ubs"/>
                             <constraint firstItem="upp-4U-rk3" firstAttribute="bottom" secondItem="foP-7w-TJT" secondAttribute="bottom" id="MtR-4q-6Uu"/>
                             <constraint firstItem="foP-7w-TJT" firstAttribute="leading" secondItem="upp-4U-rk3" secondAttribute="leading" id="QyL-WI-MZ8"/>
+                            <constraint firstItem="upp-4U-rk3" firstAttribute="trailing" secondItem="pES-Bo-g9d" secondAttribute="trailing" id="U2t-l2-6KY"/>
                             <constraint firstItem="upp-4U-rk3" firstAttribute="bottom" secondItem="q6h-Hb-ysS" secondAttribute="bottom" id="Yh8-nX-ge6"/>
                             <constraint firstItem="upp-4U-rk3" firstAttribute="trailing" secondItem="foP-7w-TJT" secondAttribute="trailing" id="cyJ-Q6-ew7"/>
                             <constraint firstItem="q6h-Hb-ysS" firstAttribute="leading" secondItem="upp-4U-rk3" secondAttribute="leading" id="ejI-Sk-JYc"/>
+                            <constraint firstItem="pES-Bo-g9d" firstAttribute="leading" secondItem="upp-4U-rk3" secondAttribute="leading" id="n0K-bQ-C1o"/>
                             <constraint firstItem="upp-4U-rk3" firstAttribute="trailing" secondItem="q6h-Hb-ysS" secondAttribute="trailing" id="t7M-XX-VZa"/>
                             <constraint firstItem="q6h-Hb-ysS" firstAttribute="top" secondItem="upp-4U-rk3" secondAttribute="top" id="zFr-Dn-LPo"/>
                         </constraints>
@@ -198,6 +237,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="infoTable" destination="q6h-Hb-ysS" id="p9B-Tg-VPU"/>
+                        <outlet property="noDataView" destination="pES-Bo-g9d" id="DWF-oQ-Agf"/>
                         <outlet property="welcomeView" destination="foP-7w-TJT" id="KOB-yY-hgX"/>
                         <segue destination="Pbi-LY-ILQ" kind="show" identifier="crudFinance" id="9k0-cd-mdz"/>
                     </connections>
@@ -323,6 +363,7 @@
         </scene>
     </scenes>
     <resources>
+        <image name="no-money" width="170" height="170"/>
         <image name="welcome" width="170" height="170"/>
     </resources>
 </document>
