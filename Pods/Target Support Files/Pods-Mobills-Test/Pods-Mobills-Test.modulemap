@@ -1,6 +1,0 @@
-framework module Pods_Mobills_Test {
-  umbrella header "Pods-Mobills-Test-umbrella.h"
-
-  export *
-  module * { export * }
-}
