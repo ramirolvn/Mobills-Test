@@ -309,19 +309,29 @@
                                 <color key="tintColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <color key="color" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                             </activityIndicatorView>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="DoA-b2-lgm">
+                                <rect key="frame" x="16" y="335" width="343" height="128"/>
+                                <connections>
+                                    <action selector="openImage:" destination="Pbi-LY-ILQ" eventType="touchUpInside" id="Mbg-7V-Ad0"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="0.83137254901960778" green="0.94901960784313721" blue="0.96078431372549022" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="jtj-K1-1V2" firstAttribute="top" secondItem="cxg-vo-a5A" secondAttribute="bottom" constant="15" id="2iH-db-1dy"/>
+                            <constraint firstItem="DoA-b2-lgm" firstAttribute="height" secondItem="ibo-E3-4aj" secondAttribute="height" id="2rI-1j-OSi"/>
                             <constraint firstItem="W9q-gn-EDg" firstAttribute="trailing" secondItem="Gxe-tN-gdc" secondAttribute="trailing" constant="16" id="3tZ-Kt-eCg"/>
+                            <constraint firstItem="DoA-b2-lgm" firstAttribute="centerX" secondItem="ibo-E3-4aj" secondAttribute="centerX" id="9ku-mS-fio"/>
                             <constraint firstItem="W9q-gn-EDg" firstAttribute="trailing" secondItem="jtj-K1-1V2" secondAttribute="trailing" constant="15" id="AhO-2P-LnB"/>
                             <constraint firstItem="ZGM-Ta-hHz" firstAttribute="centerX" secondItem="ibo-E3-4aj" secondAttribute="centerX" id="I32-R7-8WT"/>
                             <constraint firstItem="lvZ-95-Nnr" firstAttribute="centerY" secondItem="hb5-kp-OMW" secondAttribute="centerY" id="ItW-Bt-lES"/>
                             <constraint firstItem="Gxe-tN-gdc" firstAttribute="leading" secondItem="W9q-gn-EDg" secondAttribute="leading" constant="16" id="Lum-sL-foR"/>
                             <constraint firstItem="cxg-vo-a5A" firstAttribute="top" secondItem="Gxe-tN-gdc" secondAttribute="bottom" constant="15" id="PVa-PM-vfu"/>
+                            <constraint firstItem="DoA-b2-lgm" firstAttribute="centerY" secondItem="ibo-E3-4aj" secondAttribute="centerY" id="SJq-af-thK"/>
                             <constraint firstItem="ibo-E3-4aj" firstAttribute="leading" secondItem="W9q-gn-EDg" secondAttribute="leading" constant="16" id="bD2-9P-17x"/>
                             <constraint firstItem="cxg-vo-a5A" firstAttribute="leading" secondItem="W9q-gn-EDg" secondAttribute="leading" constant="16" id="dn5-n4-6pE"/>
                             <constraint firstItem="W9q-gn-EDg" firstAttribute="trailing" secondItem="cxg-vo-a5A" secondAttribute="trailing" constant="16" id="jud-Up-bhI"/>
+                            <constraint firstItem="DoA-b2-lgm" firstAttribute="width" secondItem="ibo-E3-4aj" secondAttribute="width" id="ldL-mn-Z1k"/>
                             <constraint firstItem="hb5-kp-OMW" firstAttribute="leading" secondItem="W9q-gn-EDg" secondAttribute="leading" constant="16" id="n9C-HN-iwi"/>
                             <constraint firstItem="Gxe-tN-gdc" firstAttribute="top" secondItem="W9q-gn-EDg" secondAttribute="top" constant="25" id="nfF-3A-nX0"/>
                             <constraint firstItem="lvZ-95-Nnr" firstAttribute="leading" secondItem="hb5-kp-OMW" secondAttribute="trailing" constant="15" id="sA6-XG-gWw"/>

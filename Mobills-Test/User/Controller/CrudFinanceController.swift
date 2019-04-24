@@ -210,6 +210,8 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         }
     }
     
+    //Mark:-- Buttons Actions
+    
     @IBAction func addAttachment(_ sender: UIBarButtonItem) {
         
         let alert = UIAlertController(title: "Escolha uma câmera", message: nil, preferredStyle: .actionSheet)
@@ -233,6 +235,22 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         
         self.present(alert, animated: true, completion: nil)
     }
+    
+    @IBAction func openImage(_ sender: UIButton) {
+        if let image = self.selectedIV.image{
+            let newImageView = UIImageView(image: image)
+            newImageView.frame = UIScreen.main.bounds
+            newImageView.backgroundColor = .black
+            newImageView.contentMode = .scaleAspectFit
+            newImageView.isUserInteractionEnabled = true
+            let tap = UITapGestureRecognizer(target: self, action: #selector(dismissFullscreenImage))
+            newImageView.addGestureRecognizer(tap)
+            self.view.addSubview(newImageView)
+            self.navigationController?.isNavigationBarHidden = true
+            self.tabBarController?.tabBar.isHidden = true
+        }
+    }
+    
     
     //MARK:-- ImagePicker delegate
     func imagePickerController(_ picker: UIImagePickerController, didFinishPickingMediaWithInfo info: [UIImagePickerController.InfoKey : Any]) {
@@ -328,5 +346,11 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
         if let amountString = textField.text?.currencyInputFormatting() {
             textField.text = amountString
         }
+    }
+    
+    @objc func dismissFullscreenImage(_ sender: UITapGestureRecognizer) {
+        self.navigationController?.isNavigationBarHidden = false
+        self.tabBarController?.tabBar.isHidden = false
+        sender.view?.removeFromSuperview()
     }
 }
