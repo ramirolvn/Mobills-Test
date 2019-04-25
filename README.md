@@ -30,5 +30,8 @@ pod install
 
 Necessário Swift 4.2 e Xcode 10.
 
-## Fotos
+## ScreensShoots
 ![Alt text](/../master/screens/login.png?raw=true "Login")
+![Alt text](/../master/screens/register.png?raw=true "Registro")
+![Alt text](/../master/screens/view.png?raw=true "Acompanhamento")
+
