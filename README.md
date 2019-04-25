@@ -20,6 +20,7 @@ Para o servidor:
 - [BTNavigationDropdownMenu](https://cocoapods.org/pods/BTNavigationDropdownMenun)
 
 ## Configurações
+```
 git clone https://github.com/ramirolvn/Mobills-Test.git
 cd \Mobills-Test
 pod install
@@ -28,3 +29,6 @@ pod install
 ## Especificações
 
 Necessário Swift 4.2 e Xcode 10.
+
+## Fotos
+![Alt text](/../master/screens/login.png?raw=true "Login")
