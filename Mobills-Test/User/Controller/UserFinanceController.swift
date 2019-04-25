@@ -120,8 +120,9 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             
             cellProfitOrWaste.checkBox.tintColor =  UIColor.init(rgb: 0x009000)
             cellProfitOrWaste.checkBox.isChecked = profit.recebido ?? false
+            cellProfitOrWaste.recvieveOrPaidLB.text = "Recebido?"
             cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0x009000)
-            cellProfitOrWaste.valorLB.text = profit.valor?.stringValue.currencyInputFormatting() ?? ""
+            cellProfitOrWaste.valorLB.text = profit.valor?.doubleValue.formatToString2f().currencyInputFormatting()
             cellProfitOrWaste.dateLB.text = profit.data?.dateValue().getStringDate()
             cell = cellProfitOrWaste
         }else if indexPath.section == 2, let userWastes = self.userWastes, let cellProfitOrWaste = self.infoTable.dequeueReusableCell(withIdentifier: "profitOrWasteCell") as? ProfitOrWasteCell{
@@ -136,7 +137,7 @@ class UserFinanceController: UIViewController, UITableViewDelegate, UITableViewD
             cellProfitOrWaste.checkBox.isChecked = waste.pago ?? false
             cellProfitOrWaste.recvieveOrPaidLB.text = "Pago?"
             cellProfitOrWaste.valorLB.textColor = UIColor.init(rgb: 0xcc0000)
-            cellProfitOrWaste.valorLB.text = waste.valor?.stringValue.currencyInputFormatting() ?? ""
+            cellProfitOrWaste.valorLB.text = waste.valor?.doubleValue.formatToString2f().currencyInputFormatting()
             cellProfitOrWaste.dateLB.text = waste.data?.dateValue().getStringDate()
             cell = cellProfitOrWaste
         }

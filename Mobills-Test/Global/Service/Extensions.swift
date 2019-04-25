@@ -74,7 +74,7 @@ extension NumberFormatter {
     }
 }
 extension Formatter {
-    static let currency = NumberFormatter(numberStyle: .currency)
+    static let currency = NumberFormatter(numberStyle: .currencyAccounting)
 }
 
 extension UIViewController {
@@ -130,6 +130,12 @@ extension UIColor {
             green: (rgb >> 8) & 0xFF,
             blue: rgb & 0xFF
         )
+    }
+}
+
+extension Double{
+    func formatToString2f() -> String {
+        return String(format:"%.2f",self)
     }
 }
 

@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14490.70" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14460.31" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" useSafeAreas="YES" colorMatched="YES">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14490.49"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14460.20"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -46,13 +46,13 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="welcome" translatesAutoresizingMaskIntoConstraints="NO" id="M2D-NX-XrU">
-                                        <rect key="frame" x="67.5" y="237.5" width="240" height="128"/>
+                                        <rect key="frame" x="67.5" y="216.5" width="240" height="170"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="128" id="neF-UD-OaG"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="0L2-4y-VDx">
-                                        <rect key="frame" x="125" y="161.5" width="125" height="61"/>
+                                        <rect key="frame" x="125" y="140.5" width="125" height="61"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="125" id="fIS-ZP-nGh"/>
                                         </constraints>
@@ -81,13 +81,13 @@
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
                                 <subviews>
                                     <imageView clipsSubviews="YES" userInteractionEnabled="NO" contentMode="scaleAspectFit" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="no-money" translatesAutoresizingMaskIntoConstraints="NO" id="h4j-uB-58m">
-                                        <rect key="frame" x="67.5" y="251.5" width="240" height="100"/>
+                                        <rect key="frame" x="67.5" y="216.5" width="240" height="170"/>
                                         <constraints>
                                             <constraint firstAttribute="height" relation="greaterThanOrEqual" constant="100" id="pPg-FS-sJf"/>
                                         </constraints>
                                     </imageView>
                                     <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" usesAttributedText="YES" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="bWY-Jc-pk0">
-                                        <rect key="frame" x="125" y="175.5" width="125" height="61"/>
+                                        <rect key="frame" x="125" y="140.5" width="125" height="61"/>
                                         <constraints>
                                             <constraint firstAttribute="width" constant="125" id="s0X-pI-aga"/>
                                         </constraints>
@@ -114,7 +114,8 @@
                             </view>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="q6h-Hb-ysS">
                                 <rect key="frame" x="0.0" y="64" width="375" height="603"/>
-                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <color key="sectionIndexBackgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                 <prototypes>
                                     <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" preservesSuperviewLayoutMargins="YES" selectionStyle="none" indentationWidth="10" reuseIdentifier="chartCell" rowHeight="171" id="FSS-yC-hdH" customClass="ChartCell" customModule="Mobills_Test" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="28" width="375" height="171"/>
@@ -125,12 +126,13 @@
                                             <subviews>
                                                 <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="dHu-63-QrY" customClass="PieChartView" customModule="Charts">
                                                     <rect key="frame" x="0.0" y="0.0" width="375" height="250.5"/>
-                                                    <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                                    <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                     <constraints>
                                                         <constraint firstAttribute="height" constant="250" id="GOb-yc-1hc"/>
                                                     </constraints>
                                                 </view>
                                             </subviews>
+                                            <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                             <constraints>
                                                 <constraint firstAttribute="bottom" secondItem="dHu-63-QrY" secondAttribute="bottom" id="F5T-Vw-0rQ"/>
                                                 <constraint firstItem="dHu-63-QrY" firstAttribute="leading" secondItem="pwv-hM-EPF" secondAttribute="leading" id="NNm-29-ycs"/>
@@ -138,6 +140,7 @@
                                                 <constraint firstItem="dHu-63-QrY" firstAttribute="top" secondItem="pwv-hM-EPF" secondAttribute="top" id="cw5-ND-Lss"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="chartView" destination="dHu-63-QrY" id="dQT-oK-37p"/>
                                         </connections>
@@ -223,6 +226,7 @@
                                                 <constraint firstItem="LlR-4b-X1o" firstAttribute="centerY" secondItem="Zyg-Vl-Njf" secondAttribute="centerY" id="xbt-HC-vRr"/>
                                             </constraints>
                                         </tableViewCellContentView>
+                                        <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <connections>
                                             <outlet property="checkBox" destination="ocW-1H-2R9" id="G1C-mZ-XFv"/>
                                             <outlet property="dateLB" destination="Hps-B1-4YE" id="Lry-vI-PYl"/>
@@ -233,7 +237,7 @@
                                 </prototypes>
                             </tableView>
                         </subviews>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <color key="backgroundColor" red="0.83137254900000002" green="0.94901960780000005" blue="0.96078431369999995" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="upp-4U-rk3" firstAttribute="top" secondItem="pES-Bo-g9d" secondAttribute="top" id="JuY-Ov-5SK"/>
                             <constraint firstItem="foP-7w-TJT" firstAttribute="top" secondItem="upp-4U-rk3" secondAttribute="top" id="LyW-hB-AKW"/>

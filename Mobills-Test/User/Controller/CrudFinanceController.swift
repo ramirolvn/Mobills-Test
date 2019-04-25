@@ -56,7 +56,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
             DispatchQueue.main.async {
                 self.imageSpinner.isHidden = false
                 self.dateTF.text = userProfit?.data?.dateValue().getStringDate() ?? ""
-                self.valorTF.text = userProfit?.valor?.stringValue.currencyInputFormatting() ?? ""
+                self.valorTF.text = userProfit?.valor?.doubleValue.formatToString2f().currencyInputFormatting()
                 self.ObsTV.textColor = .darkGray
                 self.ObsTV.text = userProfit?.descricao ?? ""
                 self.checkButton.isChecked = userProfit?.recebido ?? false
@@ -76,7 +76,7 @@ class CrudFinanceController: UIViewController, UITextViewDelegate, UIImagePicker
             DispatchQueue.main.async {
                 self.imageSpinner.isHidden = false
                 self.dateTF.text = wasteProfit?.data?.dateValue().getStringDate() ?? ""
-                self.valorTF.text = wasteProfit?.valor?.stringValue.currencyInputFormatting() ?? ""
+                self.valorTF.text = wasteProfit?.valor?.doubleValue.formatToString2f().currencyInputFormatting()
                 self.ObsTV.textColor = .darkGray
                 self.ObsTV.text = wasteProfit?.descricao ?? ""
                 self.checkButton.isChecked = wasteProfit?.pago ?? false
